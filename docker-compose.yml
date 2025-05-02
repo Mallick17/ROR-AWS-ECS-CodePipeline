@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    image: chat-app:latest
+    container_name: chat-app
+    ports:
+      - "80:80"  # Nginx will proxy port 80 to Rails at port 3000 internally
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    environment:
+      RAILS_ENV: production
+      DATABASE_URL: postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}
+      REDIS_URL: redis://redis:6379/0
+    depends_on:
+      - redis
+    restart: always
+
+  redis:
+    image: redis:7
+    container_name: redis
+    restart: always
+    ports:
+      - "6379:6379"
+
