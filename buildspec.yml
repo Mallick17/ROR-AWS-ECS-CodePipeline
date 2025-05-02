@@ -24,7 +24,7 @@ phases:
         cat > imagedefinitions.json <<EOF
         [
           {
-            "name": "ror-application",
+            "name": "app",
             "imageUri": "$REPOSITORY_URI:$IMAGE_TAG"
           }
         ]
