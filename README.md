@@ -442,7 +442,7 @@ This is the IAM role assumed by AWS CodePipeline to perform actions on your beha
 
 ## 2. codebuild-ror-app-role
 <details>
-  <summary> </summary>
+  <summary>Click to view the json format.</summary>
 
 ### 1. AmazonEC2ContainerRegistryPowerUser
 
@@ -1358,4 +1358,5 @@ This is the IAM role assumed by AWS CodePipeline to perform actions on your beha
 </details>
 
 ---
-  
+
+
