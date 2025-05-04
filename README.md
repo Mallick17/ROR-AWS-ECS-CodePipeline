@@ -15,8 +15,6 @@ chat-app/
 ├── config/
 │   ├── database.yml
 │   └── puma.rb
-├── nginx/
-│   └── default.conf
 ├── buildspec.yml
 ├── entrypoint.sh
 ├── nginx.conf
