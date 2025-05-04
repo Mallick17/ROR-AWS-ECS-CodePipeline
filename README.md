@@ -184,6 +184,13 @@ Ensure the following components are configured correctly:
 
 ## IAM Roles and Policies given to create the AWS CodePipeline in Detail
 
+### 1. AWSCodePipelineServiceRole-ap-south-1-mallow-ecs-ror-final-pipeline
+This is the IAM role assumed by AWS CodePipeline to perform actions on your behalf during the CI/CD process.
+
+<details>
+  <summary> Click to view AWSCodePipelineServiceRole-ap-south-1-mallow-ecs-ror-final-pipeline json format</summary>
+
+   
 <details>
   <summary>1. AWSCodePipelineServiceRole-ap-south-1-mallow-ecs-ror-final-pipeline</summary>
 
@@ -237,7 +244,7 @@ Ensure the following components are configured correctly:
 </details>
 
 <details>
-  <summary>CodePipeline-CodeBuild-ap-south-1-mallow-ecs-ror-final-pipeline</summary>
+  <summary>2. CodePipeline-CodeBuild-ap-south-1-mallow-ecs-ror-final-pipeline</summary>
 
 ### 2. CodePipeline-CodeBuild-ap-south-1-mallow-ecs-ror-final-pipeline
 ```json
@@ -264,7 +271,7 @@ Ensure the following components are configured correctly:
 ### 3. CodePipeline-CodeConnections-ap-south-1-mallow-ecs-ror-final-pipeline
 
 <details>
-  <summary>CodePipeline-CodeConnections-ap-south-1-mallow-ecs-ror-final-pipeline</summary>
+  <summary>3. CodePipeline-CodeConnections-ap-south-1-mallow-ecs-ror-final-pipeline</summary>
 
 ```json
 {
@@ -291,7 +298,7 @@ Ensure the following components are configured correctly:
 ### 4. CodePipeline-ECSDeploy-ap-south-1-mallow-ecs-ror-final-pipeline
 
 <details>
-  <summary>CodePipeline-ECSDeploy-ap-south-1-mallow-ecs-ror-final-pipeline</summary>
+  <summary>4. CodePipeline-ECSDeploy-ap-south-1-mallow-ecs-ror-final-pipeline</summary>
 
 ```json
 {
@@ -361,7 +368,7 @@ Ensure the following components are configured correctly:
 ### 5. For CodePipeline Role – ECS & ECR permissions:
 
 <details>
-  <summary>For CodePipeline Role – ECS & ECR permissions:</summary>
+  <summary>5. For CodePipeline Role – ECS & ECR permissions:</summary>
 
 ```json
 {
@@ -396,7 +403,7 @@ Ensure the following components are configured correctly:
 ### 6. For CodeBuild Role – ECR Push & ECS optional support
 
 <details>
-  <summary>For CodeBuild Role – ECR Push & ECS optional support</summary>
+  <summary>6. For CodeBuild Role – ECR Push & ECS optional support</summary>
 
 ```json
 {
@@ -428,5 +435,7 @@ Ensure the following components are configured correctly:
   ]
 }
 ```
+
+</details> 
 
 </details> 
