@@ -441,6 +441,7 @@ This is the IAM role assumed by AWS CodePipeline to perform actions on your beha
 </details> 
 
 ## 2. codebuild-ror-app-role
+
 <details>
   <summary>Click to view the json format.</summary>
 
@@ -1357,9 +1358,14 @@ This is the IAM role assumed by AWS CodePipeline to perform actions on your beha
 
 </details>
 
+</details> 
+
 ---
 
 ## 3. ecsTaskExecutionRole 
+
+<details>
+  <summary>Click to view entire json format of the role.</summary>
 
 ### 1. AmazonEC2ContainerRegistryReadOnly
 
@@ -1470,5 +1476,7 @@ This is the IAM role assumed by AWS CodePipeline to perform actions on your beha
 ```
 
 </details>
+
+</details> 
 
 ---
