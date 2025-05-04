@@ -141,7 +141,11 @@ Ensure the following components are configured correctly:
 ---
 
 ### 🔧 IAM Roles
-
+- The CodePipeline service role has the necessary permissions (including the ecr:DescribeImages permission).
+- ECS Task Execution Role: This role needs permissions to:
+- Pull images from ECR.
+- Write logs to CloudWatch Logs (if you're using logging).
+  
 - `AWSCodePipelineServiceRole` includes:
   - `ecr:DescribeImages`
   - `ecs:DescribeServices`, `ecs:UpdateService`, etc.
@@ -154,154 +158,15 @@ Ensure the following components are configured correctly:
 
 ## Phase 4: Test the Pipeline
 
-### ✅ Commit a Change
+### Commit a Change
 - Push an update to your Ruby on Rails app in the GitHub repository.
 
-### ✅ Verify Pipeline Execution
+### Verify Pipeline Execution
 - Monitor progress in the **CodePipeline Console**.
 - All stages (Source, Build, Deploy) should complete successfully.
 
-### ✅ Check ECS Deployment
+### Check ECS Deployment
 - Ensure the ECS service launches the new task with the updated image.
-
----
-
-## IAM Roles and Policies
-
-### 1. CodePipeline Service Role (S3 Access)
-```json
-{
-  "Statement": [
-    {
-      "Sid": "AllowS3BucketAccess",
-      "Effect": "Allow",
-      "Action": [
-        "s3:GetBucketVersioning",
-        "s3:GetBucketAcl",
-        "s3:GetBucketLocation"
-      ],
-      "Resource": [
-        "arn:aws:s3:::codepipeline-ap-south-1-7417d7b4a8e3-4a7d-b09d-2028b1076a80"
-      ]
-    },
-    {
-      "Sid": "AllowS3ObjectAccess",
-      "Effect": "Allow",
-      "Action": [
-        "s3:PutObject",
-        "s3:GetObject"
-      ],
-      "Resource": [
-        "arn:aws:s3:::codepipeline-ap-south-1-7417d7b4a8e3-4a7d-b09d-2028b1076a80/*"
-      ]
-    }
-  ]
-}
-````
-
-### 2. CodePipeline → CodeBuild Permissions
-
-```json
-{
-  "Action": [
-    "codebuild:StartBuild",
-    "codebuild:BatchGetBuilds"
-  ],
-  "Resource": [
-    "arn:aws:codebuild:*:339713104321:project/mallow-ecs-ror-final-codebuild"
-  ],
-  "Effect": "Allow"
-}
-```
-
-### 3. CodePipeline → CodeConnections Permissions
-
-```json
-{
-  "Action": [
-    "codeconnections:UseConnection",
-    "codestar-connections:UseConnection"
-  ],
-  "Resource": [
-    "arn:aws:codestar-connections:*:339713104321:connection/e78bca79-a1be-4f00-9f47-58e0d3058c09"
-  ],
-  "Effect": "Allow"
-}
-```
-
-### 4. CodePipeline → ECS Deployment
-
-```json
-{
-  "Statement": [
-    {
-      "Action": [
-        "ecs:DescribeTaskDefinition",
-        "ecs:RegisterTaskDefinition",
-        "ecs:UpdateService"
-      ],
-      "Effect": "Allow",
-      "Resource": "*"
-    },
-    {
-      "Action": [
-        "iam:PassRole"
-      ],
-      "Resource": "arn:aws:iam::339713104321:role/ecsTaskExecutionRole"
-    }
-  ]
-}
-```
-
-### 5. CodePipeline Role – ECS & ECR Permissions
-
-```json
-{
-  "Action": [
-    "ecs:DescribeServices",
-    "ecs:UpdateService",
-    "ecr:GetAuthorizationToken",
-    "ecr:BatchGetImage"
-  ],
-  "Effect": "Allow",
-  "Resource": "*"
-}
-```
-
----
-
-## CodeBuild Role: ECR Push & Logging
-
-```json
-{
-  "Action": [
-    "ecr:PutImage",
-    "ecr:InitiateLayerUpload",
-    "logs:CreateLogGroup",
-    "logs:PutLogEvents"
-  ],
-  "Effect": "Allow",
-  "Resource": "*"
-}
-```
-
----
-
-## Additional IAM Role: `codebuild-ror-app-role`
-
-Attached managed policies:
-
-* `AmazonEC2ContainerRegistryPowerUser`
-* `AmazonECS_FullAccess`
-* `AmazonRDSReadOnlyAccess`
-* `AmazonVPCFullAccess`
-* `AWSCodeBuildAdminAccess`
-* `CloudWatchLogsFullAccess`
-* `SecretsManagerReadWrite`
-* Custom CodeBuild policies:
-
-  * `CodeBuildBasePolicy-codebuild-ror-app-role-ap-south-1`
-  * `CodeBuildSecretsManagerPolicy-chat-app-ap-south-1`
 
 ---
 
@@ -317,5 +182,251 @@ Attached managed policies:
 ---
 
 
+## IAM Roles and Policies given to create the AWS CodePipeline in Detail
+
+<details>
+  <summary>1. AWSCodePipelineServiceRole-ap-south-1-mallow-ecs-ror-final-pipeline</summary>
+
+### 1. AWSCodePipelineServiceRole-ap-south-1-mallow-ecs-ror-final-pipeline
+
+```json
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "AllowS3BucketAccess",
+            "Effect": "Allow",
+            "Action": [
+                "s3:GetBucketVersioning",
+                "s3:GetBucketAcl",
+                "s3:GetBucketLocation"
+            ],
+            "Resource": [
+                "arn:aws:s3:::codepipelinestartertempla-codepipelineartifactsbuc-lkksehyipedk",
+                "arn:aws:s3:::codepipeline-ap-south-1-7417d7b4a8e3-4a7d-b09d-2028b1076a80"
+            ],
+            "Condition": {
+                "StringEquals": {
+                    "aws:ResourceAccount": "339713104321"
+                }
+            }
+        },
+        {
+            "Sid": "AllowS3ObjectAccess",
+            "Effect": "Allow",
+            "Action": [
+                "s3:PutObject",
+                "s3:PutObjectAcl",
+                "s3:GetObject",
+                "s3:GetObjectVersion"
+            ],
+            "Resource": [
+                "arn:aws:s3:::codepipelinestartertempla-codepipelineartifactsbuc-lkksehyipedk/*",
+                "arn:aws:s3:::codepipeline-ap-south-1-7417d7b4a8e3-4a7d-b09d-2028b1076a80/*"
+            ],
+            "Condition": {
+                "StringEquals": {
+                    "aws:ResourceAccount": "339713104321"
+                }
+            }
+        }
+    ]
+}
+```
+  
+</details>
+
+<details>
+  <summary>CodePipeline-CodeBuild-ap-south-1-mallow-ecs-ror-final-pipeline</summary>
+
+### 2. CodePipeline-CodeBuild-ap-south-1-mallow-ecs-ror-final-pipeline
+```json
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Action": [
+                "codebuild:BatchGetBuilds",
+                "codebuild:StartBuild",
+                "codebuild:BatchGetBuildBatches",
+                "codebuild:StartBuildBatch"
+            ],
+            "Resource": [
+                "arn:aws:codebuild:*:339713104321:project/mallow-ecs-ror-final-codebuild"
+            ],
+            "Effect": "Allow"
+        }
+    ]
+}
+```
+</details>
+
+### 3. CodePipeline-CodeConnections-ap-south-1-mallow-ecs-ror-final-pipeline
+
+<details>
+  <summary>CodePipeline-CodeConnections-ap-south-1-mallow-ecs-ror-final-pipeline</summary>
+
+```json
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "codeconnections:UseConnection",
+                "codestar-connections:UseConnection"
+            ],
+            "Resource": [
+                "arn:aws:codestar-connections:*:339713104321:connection/e78bca79-a1be-4f00-9f47-58e0d3058c09",
+                "arn:aws:codeconnections:*:339713104321:connection/e78bca79-a1be-4f00-9f47-58e0d3058c09"
+            ]
+        }
+    ]
+}
+```
+
+</details>  
 
 
+### 4. CodePipeline-ECSDeploy-ap-south-1-mallow-ecs-ror-final-pipeline
+
+<details>
+  <summary>CodePipeline-ECSDeploy-ap-south-1-mallow-ecs-ror-final-pipeline</summary>
+
+```json
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "TaskDefinitionPermissions",
+            "Effect": "Allow",
+            "Action": [
+                "ecs:DescribeTaskDefinition",
+                "ecs:RegisterTaskDefinition"
+            ],
+            "Resource": [
+                "*"
+            ]
+        },
+        {
+            "Sid": "ECSServicePermissions",
+            "Effect": "Allow",
+            "Action": [
+                "ecs:DescribeServices",
+                "ecs:UpdateService"
+            ],
+            "Resource": [
+                "arn:aws:ecs:*:339713104321:service/ror-cluster/*"
+            ]
+        },
+        {
+            "Sid": "ECSTagResource",
+            "Effect": "Allow",
+            "Action": [
+                "ecs:TagResource"
+            ],
+            "Resource": [
+                "arn:aws:ecs:*:339713104321:task-definition/arn:aws:ecs:ap-south-1:339713104321:task-definition/ror-mallow-task:18:*"
+            ],
+            "Condition": {
+                "StringEquals": {
+                    "ecs:CreateAction": [
+                        "RegisterTaskDefinition"
+                    ]
+                }
+            }
+        },
+        {
+            "Sid": "IamPassRolePermissions",
+            "Effect": "Allow",
+            "Action": "iam:PassRole",
+            "Resource": [
+                "arn:aws:iam::339713104321:role/ecsTaskExecutionRole"
+            ],
+            "Condition": {
+                "StringEquals": {
+                    "iam:PassedToService": [
+                        "ecs.amazonaws.com",
+                        "ecs-tasks.amazonaws.com"
+                    ]
+                }
+            }
+        }
+    ]
+}
+```
+
+</details> 
+
+### 5. For CodePipeline Role – ECS & ECR permissions:
+
+<details>
+  <summary>For CodePipeline Role – ECS & ECR permissions:</summary>
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "ecs:DescribeServices",
+        "ecs:DescribeTaskDefinition",
+        "ecs:RegisterTaskDefinition",
+        "ecs:UpdateService"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "ecr:GetAuthorizationToken",
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:GetDownloadUrlForLayer",
+        "ecr:BatchGetImage"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+```
+
+</details> 
+
+### 6. For CodeBuild Role – ECR Push & ECS optional support
+
+<details>
+  <summary>For CodeBuild Role – ECR Push & ECS optional support</summary>
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "ecr:GetAuthorizationToken",
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:GetDownloadUrlForLayer",
+        "ecr:BatchGetImage",
+        "ecr:PutImage",
+        "ecr:InitiateLayerUpload",
+        "ecr:UploadLayerPart",
+        "ecr:CompleteLayerUpload"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+```
+
+</details> 
